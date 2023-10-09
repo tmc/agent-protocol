@@ -1,0 +1,527 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: AgentProtocolService API
+    description: Service definition for Agent Protocol API.
+    version: 0.0.1
+paths:
+    /ap/v1/agent/tasks:
+        get:
+            tags:
+                - AgentProtocolService
+            description: List all tasks created for the agent.
+            operationId: AgentProtocolService_ListAgentTasks
+            parameters:
+                - name: currentPage
+                  in: query
+                  description: The current page number for pagination.
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageSize
+                  in: query
+                  description: The number of items to return per page for pagination.
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TaskListResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        post:
+            tags:
+                - AgentProtocolService
+            description: Creates a task for the agent.
+            operationId: AgentProtocolService_CreateAgentTask
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateAgentTaskRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateAgentTaskResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /ap/v1/agent/tasks/{taskId}:
+        get:
+            tags:
+                - AgentProtocolService
+            description: Retrieve details about a specified agent task.
+            operationId: AgentProtocolService_GetAgentTask
+            parameters:
+                - name: taskId
+                  in: path
+                  description: Unique identifier of the task.
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Task'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /ap/v1/agent/tasks/{taskId}/artifacts:
+        get:
+            tags:
+                - AgentProtocolService
+            description: List all artifacts associated with a given task.
+            operationId: AgentProtocolService_ListAgentTaskArtifacts
+            parameters:
+                - name: taskId
+                  in: path
+                  description: Unique identifier of the task.
+                  required: true
+                  schema:
+                    type: string
+                - name: currentPage
+                  in: query
+                  description: The current page number for pagination.
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageSize
+                  in: query
+                  description: The number of items to return per page for pagination.
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TaskArtifactsListResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        post:
+            tags:
+                - AgentProtocolService
+            description: Upload an artifact for a given task.
+            operationId: AgentProtocolService_UploadAgentTaskArtifacts
+            parameters:
+                - name: taskId
+                  in: path
+                  description: Unique identifier of the task.
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UploadAgentTaskArtifactsRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Artifact'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /ap/v1/agent/tasks/{taskId}/artifacts/{artifactId}:
+        get:
+            tags:
+                - AgentProtocolService
+            description: Download a specified artifact.
+            operationId: AgentProtocolService_DownloadAgentTaskArtifact
+            parameters:
+                - name: taskId
+                  in: path
+                  description: Unique identifier of the task the artifact is associated with.
+                  required: true
+                  schema:
+                    type: string
+                - name: artifactId
+                  in: path
+                  description: Unique identifier of the artifact.
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DownloadAgentTaskArtifactResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /ap/v1/agent/tasks/{taskId}/steps:
+        get:
+            tags:
+                - AgentProtocolService
+            description: List all steps for a specified task.
+            operationId: AgentProtocolService_ListAgentTaskSteps
+            parameters:
+                - name: taskId
+                  in: path
+                  description: Unique identifier of the task.
+                  required: true
+                  schema:
+                    type: string
+                - name: currentPage
+                  in: query
+                  description: The current page number for pagination.
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageSize
+                  in: query
+                  description: The number of items to return per page for pagination.
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TaskStepsListResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        post:
+            tags:
+                - AgentProtocolService
+            description: Execute a step in the specified agent task.
+            operationId: AgentProtocolService_ExecuteAgentTaskStep
+            parameters:
+                - name: taskId
+                  in: path
+                  description: Unique identifier of the task.
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ExecuteAgentTaskStepRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ExecuteAgentTaskStepResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /ap/v1/agent/tasks/{taskId}/steps/{stepId}:
+        get:
+            tags:
+                - AgentProtocolService
+            description: Retrieve details about a specified task step.
+            operationId: AgentProtocolService_GetAgentTaskStep
+            parameters:
+                - name: taskId
+                  in: path
+                  description: Unique identifier of the task the step belongs to.
+                  required: true
+                  schema:
+                    type: string
+                - name: stepId
+                  in: path
+                  description: Unique identifier of the step.
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Step'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+components:
+    schemas:
+        Artifact:
+            type: object
+            properties:
+                artifactId:
+                    type: string
+                    description: Unique identifier for the artifact.
+                agentCreated:
+                    type: boolean
+                    description: Flag indicating if the artifact was created by the agent.
+                fileName:
+                    type: string
+                    description: Filename of the artifact.
+                relativePath:
+                    type: string
+                    description: Relative path of the artifact within the agent's workspace.
+            description: Definition of an artifact.
+        CreateAgentTaskRequest:
+            type: object
+            properties:
+                input:
+                    type: string
+                    description: Input prompt for the task.
+                additionalInput:
+                    allOf:
+                        - $ref: '#/components/schemas/TaskInput'
+                    description: Additional input parameters for the task.
+            description: Request to create a task for an agent.
+        CreateAgentTaskResponse:
+            type: object
+            properties:
+                task:
+                    $ref: '#/components/schemas/Task'
+            description: Response containing details about the created task.
+        DownloadAgentTaskArtifactResponse:
+            type: object
+            properties:
+                content:
+                    type: string
+                    description: File content of the artifact.
+                    format: bytes
+            description: Response containing the file content of the artifact.
+        ExecuteAgentTaskStepRequest:
+            type: object
+            properties:
+                taskId:
+                    type: string
+                    description: Unique identifier of the task.
+                input:
+                    type: string
+                    description: Input prompt for the step.
+                additionalInput:
+                    allOf:
+                        - $ref: '#/components/schemas/StepInput'
+                    description: Additional input parameters for the step.
+            description: Request to execute a step in a specific agent task.
+        ExecuteAgentTaskStepResponse:
+            type: object
+            properties:
+                step:
+                    allOf:
+                        - $ref: '#/components/schemas/Step'
+                    description: The step that was executed.
+            description: Response containing details about the executed step.
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        Pagination:
+            type: object
+            properties:
+                totalItems:
+                    type: integer
+                    description: Total number of items available.
+                    format: int32
+                totalPages:
+                    type: integer
+                    description: Total number of pages available.
+                    format: int32
+                currentPage:
+                    type: integer
+                    description: The current page number.
+                    format: int32
+                pageSize:
+                    type: integer
+                    description: The number of items per page.
+                    format: int32
+            description: Pagination details for list responses.
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        Step:
+            type: object
+            properties:
+                taskId:
+                    type: string
+                    description: Unique identifier of the task this step belongs to.
+                stepId:
+                    type: string
+                    description: Unique identifier of the step.
+                name:
+                    type: string
+                    description: Name of the task step.
+                status:
+                    type: string
+                    description: Current status of the task step.
+                output:
+                    type: string
+                    description: Output produced by the step.
+                additionalOutput:
+                    allOf:
+                        - $ref: '#/components/schemas/StepOutput'
+                    description: Additional output parameters for the step.
+                artifacts:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Artifact'
+                    description: List of artifacts produced by the step.
+                isLast:
+                    type: boolean
+                    description: Flag indicating if this is the last step in the task.
+            description: Definition of a task step.
+        StepInput:
+            type: object
+            properties:
+                inputParameters:
+                    type: object
+                    description: Key-value pairs of input parameters.
+            description: Input parameters for a task step.
+        StepOutput:
+            type: object
+            properties:
+                outputParameters:
+                    type: object
+                    description: Key-value pairs of output parameters.
+            description: Output parameters from a task step.
+        Task:
+            type: object
+            properties:
+                taskId:
+                    type: string
+                    description: The unique identifier of the task.
+                input:
+                    type: string
+                    description: Input prompt for the task.
+                additionalInput:
+                    allOf:
+                        - $ref: '#/components/schemas/TaskInput'
+                    description: Additional input parameters for the task.
+                artifacts:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Artifact'
+                    description: List of artifacts produced by the task.
+            description: Definition of an agent task.
+        TaskArtifactsListResponse:
+            type: object
+            properties:
+                artifacts:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Artifact'
+                    description: List of artifacts.
+                pagination:
+                    allOf:
+                        - $ref: '#/components/schemas/Pagination'
+                    description: Pagination details.
+            description: Response containing a list of artifacts and pagination details.
+        TaskInput:
+            type: object
+            properties:
+                inputParameters:
+                    type: object
+                    description: Key-value pairs of input parameters.
+            description: Input parameters for an agent task.
+        TaskListResponse:
+            type: object
+            properties:
+                tasks:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Task'
+                    description: List of tasks.
+                pagination:
+                    allOf:
+                        - $ref: '#/components/schemas/Pagination'
+                    description: Pagination details.
+            description: Response containing a list of tasks and pagination details.
+        TaskStepsListResponse:
+            type: object
+            properties:
+                steps:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Step'
+                    description: List of steps.
+                pagination:
+                    allOf:
+                        - $ref: '#/components/schemas/Pagination'
+                    description: Pagination details.
+            description: Response containing a list of steps and pagination details.
+        UploadAgentTaskArtifactsRequest:
+            type: object
+            properties:
+                taskId:
+                    type: string
+                    description: Unique identifier of the task.
+                file:
+                    type: string
+                    description: File content of the artifact.
+                relativePath:
+                    type: string
+                    description: Relative path for the artifact within the agent's workspace.
+            description: Request to upload an artifact for a specific agent task.
+tags:
+    - name: AgentProtocolService

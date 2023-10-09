@@ -1,0 +1,10 @@
+version: v1
+managed:
+  enabled: true
+  go_package_prefix:
+    default: github.com/AI-Engineer-Foundation/agent-protocol/gen
+plugins:
+  - plugin: openapi # Requires `go install github.com/google/gnostic/cmd/protoc-gen-openapi@main`
+    out: ../schemas
+    opt: paths=source_relative
+
