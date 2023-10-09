@@ -1,0 +1,260 @@
+syntax = "proto3";
+
+package agentprotocol.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+
+// Service definition for Agent Protocol API.
+service AgentProtocolService {
+    // Creates a task for the agent.
+    rpc CreateAgentTask(CreateAgentTaskRequest) returns (CreateAgentTaskResponse) {
+        option (google.api.http) = {
+            post: "/ap/v1/agent/tasks"
+            body: "*"
+        };
+    }
+    // Download a specified artifact.
+    rpc DownloadAgentTaskArtifact(DownloadAgentTaskArtifactRequest) returns (DownloadAgentTaskArtifactResponse) {
+        option (google.api.http) = {
+            get: "/ap/v1/agent/tasks/{task_id}/artifacts/{artifact_id}"
+        };
+    }
+    // Execute a step in the specified agent task.
+    rpc ExecuteAgentTaskStep(ExecuteAgentTaskStepRequest) returns (ExecuteAgentTaskStepResponse) {
+        option (google.api.http) = {
+            post: "/ap/v1/agent/tasks/{task_id}/steps"
+            body: "*"
+        };
+    }
+    // Retrieve details about a specified agent task.
+    rpc GetAgentTask(GetAgentTaskRequest) returns (Task) {
+        option (google.api.http) = {
+            get: "/ap/v1/agent/tasks/{task_id}"
+        };
+    }
+    // Retrieve details about a specified task step.
+    rpc GetAgentTaskStep(GetAgentTaskStepRequest) returns (Step) {
+        option (google.api.http) = {
+            get: "/ap/v1/agent/tasks/{task_id}/steps/{step_id}"
+        };
+    }
+    // List all artifacts associated with a given task.
+    rpc ListAgentTaskArtifacts(ListAgentTaskArtifactsRequest) returns (TaskArtifactsListResponse) {
+        option (google.api.http) = {
+            get: "/ap/v1/agent/tasks/{task_id}/artifacts"
+        };
+    }
+    // List all steps for a specified task.
+    rpc ListAgentTaskSteps(ListAgentTaskStepsRequest) returns (TaskStepsListResponse) {
+        option (google.api.http) = {
+            get: "/ap/v1/agent/tasks/{task_id}/steps"
+        };
+    }
+    // List all tasks created for the agent.
+    rpc ListAgentTasks(ListAgentTasksRequest) returns (TaskListResponse) {
+        option (google.api.http) = {
+            get: "/ap/v1/agent/tasks"
+        };
+    }
+    // Upload an artifact for a given task.
+    rpc UploadAgentTaskArtifacts(UploadAgentTaskArtifactsRequest) returns (Artifact) {
+        option (google.api.http) = {
+            post: "/ap/v1/agent/tasks/{task_id}/artifacts"
+            body: "*"
+        };
+    }
+}
+
+// Request to create a task for an agent.
+message CreateAgentTaskRequest {
+    // Input prompt for the task.
+    string input = 1;
+    // Additional input parameters for the task.
+    TaskInput additional_input = 2;
+}
+
+// Response containing details about the created task.
+message CreateAgentTaskResponse {
+    Task task = 1;
+}
+
+// Definition of an agent task.
+message Task {
+    // The unique identifier of the task.
+    string task_id = 1;
+    // Input prompt for the task.
+    string input = 2;
+    // Additional input parameters for the task.
+    TaskInput additional_input = 3;
+    // List of artifacts produced by the task.
+    repeated Artifact artifacts = 4;
+}
+
+// Input parameters for an agent task.
+message TaskInput {
+    // Key-value pairs of input parameters.
+    google.protobuf.Struct input_parameters = 1;
+}
+
+// Definition of an artifact.
+message Artifact {
+    // Unique identifier for the artifact.
+    string artifact_id = 1;
+    // Flag indicating if the artifact was created by the agent.
+    bool agent_created = 2;
+    // Filename of the artifact.
+    string file_name = 3;
+    // Relative path of the artifact within the agent's workspace.
+    string relative_path = 4;
+}
+
+// Request to download a specific artifact.
+message DownloadAgentTaskArtifactRequest {
+    // Unique identifier of the task the artifact is associated with.
+    string task_id = 1;
+    // Unique identifier of the artifact.
+    string artifact_id = 2;
+}
+
+// Response containing the file content of the artifact.
+message DownloadAgentTaskArtifactResponse {
+    // File content of the artifact.
+    bytes content = 1;
+}
+
+// Request to execute a step in a specific agent task.
+message ExecuteAgentTaskStepRequest {
+    // Unique identifier of the task.
+    string task_id = 1;
+    // Input prompt for the step.
+    string input = 2;
+    // Additional input parameters for the step.
+    StepInput additional_input = 3;
+}
+
+// Response containing details about the executed step.
+message ExecuteAgentTaskStepResponse {
+    // The step that was executed.
+    Step step = 1;
+}
+
+// Definition of a task step.
+message Step {
+    // Unique identifier of the task this step belongs to.
+    string task_id = 1;
+    // Unique identifier of the step.
+    string step_id = 2;
+    // Name of the task step.
+    string name = 3;
+    // Current status of the task step.
+    string status = 4;
+    // Output produced by the step.
+    string output = 5;
+    // Additional output parameters for the step.
+    StepOutput additional_output = 6;
+    // List of artifacts produced by the step.
+    repeated Artifact artifacts = 7;
+    // Flag indicating if this is the last step in the task.
+    bool is_last = 8;
+}
+
+// Input parameters for a task step.
+message StepInput {
+    // Key-value pairs of input parameters.
+    google.protobuf.Struct input_parameters = 1;
+}
+
+// Output parameters from a task step.
+message StepOutput {
+    // Key-value pairs of output parameters.
+    google.protobuf.Struct output_parameters = 1;
+}
+
+// Request to retrieve details about a specific agent task.
+message GetAgentTaskRequest {
+    // Unique identifier of the task.
+    string task_id = 1;
+}
+
+// Request to retrieve details about a specific task step.
+message GetAgentTaskStepRequest {
+    // Unique identifier of the task the step belongs to.
+    string task_id = 1;
+    // Unique identifier of the step.
+    string step_id = 2;
+}
+
+// Request to list artifacts for a specific agent task.
+message ListAgentTaskArtifactsRequest {
+    // The current page number for pagination.
+    int32 current_page = 1;
+    // The number of items to return per page for pagination.
+    int32 page_size = 2;
+    // Unique identifier of the task.
+    string task_id = 3;
+}
+
+// Response containing a list of artifacts and pagination details.
+message TaskArtifactsListResponse {
+    // List of artifacts.
+    repeated Artifact artifacts = 1;
+    // Pagination details.
+    Pagination pagination = 2;
+}
+
+// Request to list steps for a specific agent task.
+message ListAgentTaskStepsRequest {
+    // The current page number for pagination.
+    int32 current_page = 1;
+    // The number of items to return per page for pagination.
+    int32 page_size = 2;
+    // Unique identifier of the task.
+    string task_id = 3;
+}
+
+// Response containing a list of steps and pagination details.
+message TaskStepsListResponse {
+    // List of steps.
+    repeated Step steps = 1;
+    // Pagination details.
+    Pagination pagination = 2;
+}
+
+// Request to list all tasks created for an agent.
+message ListAgentTasksRequest {
+    // The current page number for pagination.
+    int32 current_page = 1;
+    // The number of items to return per page for pagination.
+    int32 page_size = 2;
+}
+
+// Response containing a list of tasks and pagination details.
+message TaskListResponse {
+    // List of tasks.
+    repeated Task tasks = 1;
+    // Pagination details.
+    Pagination pagination = 2;
+}
+
+// Request to upload an artifact for a specific agent task.
+message UploadAgentTaskArtifactsRequest {
+    // Unique identifier of the task.
+    string task_id = 1;
+    // File content of the artifact.
+    string file = 2;
+    // Relative path for the artifact within the agent's workspace.
+    string relative_path = 3;
+}
+
+// Pagination details for list responses.
+message Pagination {
+    // Total number of items available.
+    int32 total_items = 1;
+    // Total number of pages available.
+    int32 total_pages = 2;
+    // The current page number.
+    int32 current_page = 3;
+    // The number of items per page.
+    int32 page_size = 4;
+}

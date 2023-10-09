@@ -1,0 +1,11 @@
+version: v1
+name: buf.build/tmc/agentprotocol
+breaking:
+  use:
+    - FILE
+deps:
+  - buf.build/protocolbuffers/wellknowntypes:main
+  - buf.build/googleapis/googleapis:main
+lint:
+  use:
+    - DEFAULT
